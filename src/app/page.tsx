@@ -5,7 +5,8 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 
-const stripePromise = loadStripe("pk_test_51RUVJd03qGAtkcQchTp6iaLs4XxUszdOACTfvWedTKDTVWm26QIRWfd804uicD7WW9eBpUHTqe2yhK33e39M6gqe00qmKsvaXM");
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 
 export default function Home() {
    const [form, setForm] = useState({ nome: "", nascimento: "", rg: "" });
@@ -15,7 +16,8 @@ export default function Home() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCheckout = async () => {
+  const handleCheckout = async () => {    
+    console.log("Stripe Public Key:", process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
     const stripe = await stripePromise;
 
     const res = await fetch("/api/checkout", {
@@ -32,21 +34,21 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <Card className="max-w-md w-full">
         <CardContent className="space-y-4">
-          <h2 className="text-xl font-bold">Criar RG de Bebê Reborn</h2>
+          <h2 className="text-xl font-bold color-gray-500">Criar RG de Bebê Reborn</h2>
           <input
             type="text"
             name="nome"
             placeholder="Nome do bebê"
             value={form.nome}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded placeholder-gray-500 color-gray-500"
           />
           <input
             type="date"
             name="nascimento"
             value={form.nascimento}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded placeholder-gray-500 color-gray-500"
           />
           <input
             type="text"
@@ -54,7 +56,7 @@ export default function Home() {
             placeholder="Número do RG"
             value={form.rg}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded placeholder-gray-500 color-gray-500"
           />
           <Button onClick={handleCheckout} className="w-full">
             Pagar e Gerar RG

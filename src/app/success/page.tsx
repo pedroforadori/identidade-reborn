@@ -10,6 +10,8 @@ export default function Success() {
   const [dados, setDados] = useState<any>(null);
   const rgRef = useRef(null);
 
+  console.log("Session ID:", session_id);
+  
   useEffect(() => {
     if (!session_id) return;
     fetch(`/api/session?session_id=${session_id}`)
